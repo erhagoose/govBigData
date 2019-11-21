@@ -1,0 +1,18 @@
+[[source]]
+name = "tuna"
+url = "https://pypi.tuna.tsinghua.edu.cn/simple"
+verify_ssl = true
+
+[dev-packages]
+pylint = "*"
+autopep8 = "*"
+
+[packages]
+matplotlib = "*"
+pandas = "*"
+numpy = "*"
+scipy = "*"
+progressbar = "*"
+
+[requires]
+python_version = "3.7"
