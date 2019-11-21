@@ -5,7 +5,10 @@ import os
 import json
 
 def json2csv(line, fields):
-    obj = json.loads(line)
+    try:
+        obj = json.loads(line)
+    except:
+        return ''
     return ','.join([(str(obj[f]) if f in obj.keys() else '') for f in fields])
 
 tar_names = {
