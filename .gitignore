@@ -2,3 +2,5 @@ data/
 .vscode
 .Rproj.user
 .Rhistory
+packrat/lib*/
+packrat/src/
