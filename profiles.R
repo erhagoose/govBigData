@@ -65,5 +65,7 @@ ggplot(pubpost, aes(title, x, fill=wpi), na.rm= TRUE) +
   geom_bar(stat = 'identity', na.rm= TRUE) +
   labs(x = '公众号名称', y = '推送文章数') +
   guides(fill = guide_legend(title = 'WPI')) +
+  scale_fill_gradient(low = '#00B1F7', high = '#aa2B43') +
   facet_grid(type ~., scales = 'free_y', space="free_y", drop = TRUE) +
   theme(text = element_text(family='Kai'))
+
