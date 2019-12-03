@@ -44,11 +44,16 @@ pubpost = merge(pubpost,
              by = 'msgBiz',
              all.x = TRUE)
 pubpost = na.omit(pubpost)
-ord <- sort(pubpost$x, index.return=TRUE, decreasing = FALSE)
-pubpost$title = factor(pubpost$title, levels = pubpost$title[ord$ix])
+ord <- order(pubpost$type, pubpost$x)
+## arrange in plot
+pubpost$title = factor(pubpost$title, levels = pubpost$title[ord])
+pubpost$type = factor(pubpost$type, levels = c('政府发布', '官方媒体', '机构媒体', '内容运营'))
 
 ggplot(pubpost, aes(title, x, fill=readNum), na.rm= TRUE) +
   coord_flip() +
   geom_bar(stat = 'identity', na.rm= TRUE) +
+  labs(x = '公众号名称', y = '推送文章数') +
+  guides(fill = guide_legend(title = '阅读量')) +
+  facet_grid(type ~., scales = 'free_y', space="free_y", drop = TRUE) +
   theme(text = element_text(family='Kai'))
   
