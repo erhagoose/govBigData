@@ -1,4 +1,9 @@
-library(ggplot2)
+source('loadPackages.R', encoding = 'UTF-8')
+
+# mongodb
+mongourl <- "mongodb://192.10.10.108:27017/wechat_spider"
+mposts <- mongo("posts", url = mongourl)
+mpubs <- mongo("profiles", url = mongourl)
 # load data
 posts <- mposts$find(
   query = '{}', 
@@ -28,14 +33,22 @@ profiles <- mpubs$find(
           }'
 )
 profiles = na.omit(profiles)
-nposts = merge(nposts,
-             profiles[c('msgBiz', 'title')],
+
+pubpost <- aggregate(nposts$msgBiz, list(msgBiz = nposts$msgBiz), length)
+pub2 <- aggregate(nposts[c('readNum', 'likeNum')],
+                  list(msgBiz = nposts$msgBiz),
+                  mean)
+pubpost = merge(pubpost, pub2, by = 'msgBiz')
+pubpost = merge(pubpost,
+             profiles[c('msgBiz', 'title', 'type')],
              by = 'msgBiz',
              all.x = TRUE)
+pubpost = na.omit(pubpost)
+ord <- sort(pubpost$x, index.return=TRUE, decreasing = FALSE)
+pubpost$title = factor(pubpost$title, levels = pubpost$title[ord$ix])
 
-ggplot(nposts, aes(title.y)) +
+ggplot(pubpost, aes(title, x, fill=readNum), na.rm= TRUE) +
   coord_flip() +
-  stat_count() +
+  geom_bar(stat = 'identity', na.rm= TRUE) +
   theme(text = element_text(family='Kai'))
-
   

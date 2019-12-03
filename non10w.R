@@ -1,5 +1,4 @@
-library("mongolite")
-library("ggplot2")
+source('loadPackages.R', encoding = 'UTF-8')
 library("ggpubr")
 
 # mongodb
