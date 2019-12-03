@@ -2,6 +2,7 @@ data/
 outputs/
 .vscode
 .Rproj.user
+.RData
 .Rhistory
 packrat/lib*/
 packrat/src/
