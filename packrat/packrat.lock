@@ -8,6 +8,11 @@ Source: CRAN
 Version: 1.69.0-1
 Hash: 15f597ed227897f4f793b6161260f4b9
 
+Package: Cairo
+Source: CRAN
+Version: 1.5-10
+Hash: a1b8eea3e90670a83af44072564893f1
+
 Package: R6
 Source: CRAN
 Version: 2.4.1
@@ -94,6 +99,12 @@ Source: CRAN
 Version: 2.18.0
 Hash: f4fdf56bd81ae3e1d42379678b472a34
 Requires: gtools
+
+Package: gdtools
+Source: CRAN
+Version: 0.2.1
+Hash: 25cc6a90aaa8d8d7500957dcbf849b3a
+Requires: Rcpp, systemfonts
 
 Package: ggplot2
 Source: CRAN
@@ -197,6 +208,11 @@ Version: 0.5.0
 Hash: 38d0efee9bb99bef143bde41c4ce715c
 Requires: colorspace
 
+Package: nloptr
+Source: CRAN
+Version: 1.2.1
+Hash: c2b0475b9a177d3331957e366a7059a0
+
 Package: openssl
 Source: CRAN
 Version: 1.4.1
@@ -270,10 +286,21 @@ Version: 1.4.0
 Hash: 67da32dbb2a7a16f2ef124336358e54a
 Requires: glue, magrittr, stringi
 
+Package: svglite
+Source: CRAN
+Version: 1.2.2
+Hash: d6dd7bed2a559d0597b5fe066df33430
+Requires: BH, Rcpp, gdtools
+
 Package: sys
 Source: CRAN
 Version: 3.3
 Hash: d5a4afad9298f42aae77f6389713a066
+
+Package: systemfonts
+Source: CRAN
+Version: 0.1.1
+Hash: ac1ec260f6d8907d0755ca5154607cfc
 
 Package: tibble
 Source: CRAN
