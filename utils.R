@@ -1,5 +1,4 @@
 ## Post Propagation Index
-
 ppi <- function (readNum, likeNum) {
   if (readNum > 100000) { readNum = readNum * 1.5 }
   if (likeNum > 100000) { likeNum = likeNum * 1.5 }
@@ -7,7 +6,6 @@ ppi <- function (readNum, likeNum) {
 }
 
 ## Weixin Propagation Index
-
 wpi <- function (posts) {
   mr <- max(posts$readNum, na.rm = TRUE)
   ml <- max(posts$likeNum, na.rm = TRUE)
@@ -30,3 +28,33 @@ wpi <- function (posts) {
           + 0.3 * (0.85 * log(1 + sumr / d)  + 0.15 * log(1 + suml / d)))
 }
 
+## Poisson Fit
+poisson.fit <- function (v, extraN = 0) {
+  L = length(v)
+  N = sum(v) + extraN
+  eval_f <- function (lbd) {
+    res <- 0
+    q <- 0
+    for(k in 1:L) {
+      q = q + log(lbd) - log(k)
+      res = res + (exp(q - lbd) * N - v[k])^2 / L
+    }
+    return (res)
+  }
+  res <- nloptr::nloptr(1,
+                        eval_f = eval_f,
+                        lb = 1, ub = L * 1.0,
+                        opts = list("algorithm"="NLOPT_LN_COBYLA",
+                                    "xtol_rel"=1.0e-6))
+  return (res$solution)
+}
+
+poisson.generate <- function (lbd, L, N) {
+  v <- rep(0, L)
+  q <- 0
+  for(k in 1:L) {
+    q = q + log(lbd) - log(k)
+    v[k] = exp(q - lbd) * N
+  }
+  return (v)
+} 
