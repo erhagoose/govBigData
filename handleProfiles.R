@@ -1,3 +1,5 @@
+# set types of profiles according to the csv file
+
 library("mongolite")
 library("ggplot2")
 library("ggpubr")

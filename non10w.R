@@ -1,3 +1,4 @@
+# Analyze the non 10w+ posts
 source('loadPackages.R', encoding = 'UTF-8')
 library("ggpubr")
 
