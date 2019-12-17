@@ -1,10 +1,12 @@
-# show one post via wordcloud
+# show one pub with topic words
 
 source('loadPackages.R', encoding = 'UTF-8')
 source('utils.R')
 library('jiebaR')
 library('text2vec')
 library('glmnet')
+
+pubtitle <- '深圳发布'
 
 # mongodb
 mongourl <- "mongodb://localhost:27017/wechat_spider"
@@ -40,12 +42,13 @@ posts <- na.omit(posts)
 summary(posts)
 
 # cross query
-pubtitle <- '深圳发布'
 pbps <- merge(posts,
               profiles[c('msgBiz', 'title', 'type')],
               by = 'msgBiz',
-              all.x = TRUE)
+              all.x = TRUE,
+              all.y = FALSE)
 pubposts <- pbps[pbps['title.y'] == pubtitle,]
+pubposts = na.omit(pubposts)
 
 # segment & create vocab
 wk <- worker(stop_word = 'stop_words.txt', bylines = TRUE)
@@ -71,14 +74,17 @@ doc_topic_distr =
   lda_model$fit_transform(x = dtm, n_iter = 1000, 
                           convergence_tol = 0.0001, n_check_convergence = 25, 
                           progressbar = TRUE)
-wds <- lda_model$get_top_words(n = 10, lambda = 0.3)
+wds <- lda_model$get_top_words(n = 10, lambda = 0.2)
 topwords <- wds[1,]
 
 # plot lda
 lda_model$plot()
 
+# calc ppi
+pubposts$ppi <- mapply(ppi, pubposts$readNum, pubposts$likeNum)
+
 # plot dist
-doc_topic_rdnum <- as.data.frame(doc_topic_distr * pubposts$readNum)
+doc_topic_rdnum <- as.data.frame(doc_topic_distr * pubposts$ppi)
 topic_vals <- tidyr::gather(doc_topic_rdnum, 'label')
 mp <- setNames(topwords, colnames(doc_topic_rdnum))
 topic_vals$label = mp[topic_vals$label]
@@ -86,7 +92,7 @@ topic_vals$label = mp[topic_vals$label]
 ggplot(topic_vals, aes(label, value), na.rm= TRUE) +
   geom_boxplot(outlier.size=0) +
   labs(x = '主题首要词', y = '折算传播力度', title = sprintf('%s主题情况', pubtitle)) +
-  coord_cartesian(ylim = c(0, 400)) +
+  coord_cartesian(ylim = c(0, 1.5)) +
   theme(text = element_text(family='Kai'),
         plot.title = element_text(hjust = 0.5))
 ggsave(sprintf("outputs/%s.svg", pubtitle), width = 8, height = 6)
