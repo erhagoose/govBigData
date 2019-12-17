@@ -44,6 +44,11 @@ Source: CRAN
 Version: 1.1.5
 Hash: 35ad64fcf2063e2a52031b0f1a59d8f0
 
+Package: base64enc
+Source: CRAN
+Version: 0.1-3
+Hash: c590d29e555926af053055e23ee79efb
+
 Package: cli
 Source: CRAN
 Version: 1.1.0
@@ -164,6 +169,29 @@ Package: gtools
 Source: CRAN
 Version: 3.8.1
 Hash: 6cb09dd6faf3aeac5c5acae55bfa6495
+
+Package: htmltools
+Source: CRAN
+Version: 0.4.0
+Hash: ede066c0aec518db9acda803c6b94503
+Requires: Rcpp, digest, rlang
+
+Package: htmlwidgets
+Source: CRAN
+Version: 1.5.1
+Hash: 20e5cc02b795afc7322836c947b5aab2
+Requires: htmltools, jsonlite, yaml
+
+Package: jiebaR
+Source: CRAN
+Version: 0.10.99
+Hash: d6425e825bc24779cc1020274dab76ce
+Requires: Rcpp, jiebaRD
+
+Package: jiebaRD
+Source: CRAN
+Version: 0.1
+Hash: 5e3a66218922f8f5e710609b6423098d
 
 Package: jsonlite
 Source: CRAN
@@ -341,6 +369,17 @@ Package: withr
 Source: CRAN
 Version: 2.1.2
 Hash: d534108bcd5f34ec73e9eb523751ba20
+
+Package: wordcloud2
+Source: CRAN
+Version: 0.2.1
+Hash: e33b8fee35828bcf708b8a203b0b725e
+Requires: base64enc, htmlwidgets
+
+Package: yaml
+Source: CRAN
+Version: 2.2.0
+Hash: a5ad5616d83d89f8d84cbf3cf4034e13
 
 Package: zeallot
 Source: CRAN

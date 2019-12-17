@@ -3,7 +3,7 @@
 source('loadPackages.R', encoding = 'UTF-8')
 source('utils.R')
 library('jiebaR')
-library('wordcloud2')
+library('text2vec')
 
 # mongodb
 mongourl <- "mongodb://192.10.10.108:27017/wechat_spider"
@@ -45,9 +45,8 @@ pbps <- merge(posts,
               by = 'msgBiz',
               all.x = TRUE)
 pubposts <- pbps[pbps['title.y'] == '深圳发布',]
+
 # segment
-wk <- worker(stop_word = 'stop_words.txt')
-seg <- wk[pbps['content'][10,1]]
-idf <- get_idf(list(seg,seg), stop_word = 'stop_words.txt')
-fre <- freq(seg)
-wordcloud2(fre[fre['freq'] >= 1,], shape = 'diamond')
+wk <- worker(stop_word = 'stop_words.txt', bylines = TRUE)
+seg <- function(k) wk[k]
+
