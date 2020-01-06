@@ -6,10 +6,8 @@ library('jiebaR')
 library('text2vec')
 library('glmnet')
 
-pubtitle <- '上海发布'
-
 # mongodb
-mongourl <- "mongodb://localhost:27017/wechat_spider"
+mongourl <- "mongodb://192.10.10.108:27017/wechat_spider"
 mposts <- mongo("posts", url = mongourl)
 mpubs <- mongo("profiles", url = mongourl)
 
@@ -95,7 +93,7 @@ analyzePubposts <- function (pubtitle, pubposts) {
     coord_cartesian(ylim = c(0, 1.5)) +
     theme(text = element_text(family='Kai'),
           plot.title = element_text(hjust = 0.5))
-  ggsave(sprintf("outputs/%s.svg", pubtitle), width = 8, height = 6)
+  ggsave(sprintf("outputs/%s.png", pubtitle), width = 8, height = 6)
 }
 
 for (pubtitle in profiles$title) {
