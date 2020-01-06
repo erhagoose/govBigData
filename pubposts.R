@@ -93,7 +93,22 @@ analyzePubposts <- function (pubtitle, pubposts) {
     coord_cartesian(ylim = c(0, 1.5)) +
     theme(text = element_text(family='Kai'),
           plot.title = element_text(hjust = 0.5))
-  ggsave(sprintf("outputs/%s.png", pubtitle), width = 8, height = 6)
+  ggsave(sprintf("outputs/%s.png", pubtitle), width = 8, height = 6) 
+
+  # fit
+  pubposts_topics <- as.data.frame(doc_topic_distr)
+  pubposts_topics <- cbind(`_id` = row.names(pubposts_topics),
+                           pubposts_topics,
+                           stringsAsFactors = FALSE)
+  row.names(pubposts_topics) <- 1:nrow(pubposts_topics)
+  pubposts_topics = merge(pubposts_topics, pubposts[c('_id', 'ppi')], by = '_id', all.x=TRUE)
+  cent.data <- apply(pubposts_topics[,-1], 2, function(x){ x - mean(x) })
+  lm.sol <- lm(ppi ~ 0 + V1 + V2 + V3 + V4 + V5 + V6 + V7 + V8 + V9,
+               data = as.data.frame(cent.data))
+  sink(sprintf('outputs/%s-coef.txt', pubtitle))
+  summary(lm.sol)
+  stargazer(summary(lm.sol)$coefficients)
+  sink()
 }
 
 for (pubtitle in profiles$title) {
