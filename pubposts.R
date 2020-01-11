@@ -5,6 +5,7 @@ source('utils.R')
 library('jiebaR')
 library('text2vec')
 library('glmnet')
+library('stargazer')
 
 # mongodb
 mongourl <- "mongodb://192.10.10.108:27017/wechat_spider"
@@ -106,7 +107,9 @@ analyzePubposts <- function (pubtitle, pubposts) {
   lm.sol <- lm(ppi ~ 0 + V1 + V2 + V3 + V4 + V5 + V6 + V7 + V8 + V9,
                data = as.data.frame(cent.data))
   sink(sprintf('outputs/%s-coef.txt', pubtitle))
-  summary(lm.sol)
+  print(summary(lm.sol))
+  sink()
+  sink(sprintf('outputs/%s-coef.txt', pubtitle), append = TRUE)
   stargazer(summary(lm.sol)$coefficients)
   sink()
 }

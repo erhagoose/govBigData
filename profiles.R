@@ -72,3 +72,4 @@ ggplot(pubpost, aes(title, x, fill=wpi), na.rm= TRUE) +
   theme(text = element_text(family='Kai'),
         plot.title = element_text(hjust = 0.5))
 ggsave("outputs/profiles.svg", width = 6, height = 8)
+ggsave("outputs/profiles.png", width = 6, height = 8)
