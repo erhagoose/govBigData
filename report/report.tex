@@ -74,7 +74,7 @@
       \item 查看可视化内容并获取数据。数据储存在MongoDB数据库中，可导出为json文件或直接拷贝数据库。爬取的公众号信息包括：名称、头像、更新时间、标识码。爬取的推送信息包括：名称、封面、公众号、发布时间、评论（含点赞数）、内容（纯文本）、点赞数、阅读量。
     \end{enumerate}
     \subsection{样本描述}
-    通过上述的数据获取方式，共获取到官媒相关公众号19项，非官媒公众号20项。各公众号在给定时间范围内的推送总数如\cref{fig:profiles}所示。其中，WPI为该公众号的传播力度量，将在\cref{sub:xiaoli}中提及。
+    通过上述的数据获取方式，共获取到官媒相关公众号19项，非官媒公众号20项。各公众号在给定时间范围内的推送总数如\cref{fig:profiles}所示。其中，WPI为该公众号的传播力度量，将在\cref{sub:xiaoli}中提及，数值越大代表传播力越高。
     \begin{figure}
       \centering
       \includegraphics[width=0.9\linewidth]{profiles.png}
@@ -82,12 +82,40 @@
       \label{fig:profiles}
     \end{figure}
     
-    从图中可见，官媒公众号的发布数量，要远大于非官媒公众号数量。
+    从图中可见，官媒公众号的发布数量，要远大于非官媒公众号数量。事实上，根据本人的观察，官媒公众号可以每天多次发布信息，其单日发送的推送上限要远高于普通的机构媒体和内容运营公众号。另外，上海、重庆、深圳的政府发布公众号在所有观测公众号中累计发布数量位列前三，人民日报公众号在所有观测公众号中累计发布数量遥遥领先，传播力也同样很高。这一类排名靠前的公众号，因其运营更好、数据更多，更具备分析的价值。
     \subsection{效力分析}
     \label{sub:xiaoli}
+    在本文中，对推送效力、公众号效力的量化分析是至关重要的。所谓效力的量化分析，即是建立从推文或公众号数据，到效力量化指标的映射。
+    
+    清博大数据对于该问题提出了一种名为微信传播指数WCI的公众号传播效力分析方法\cite{清博大数据2020}。分别记总阅读数$R$，总在看（点赞）数$Z$，最大阅读数$R_{max}$，最大在看数$Z_{max}$，头条总阅读数$R_t$，头条总在看数$Z_t$，统计总天数$d$，统计总篇数$n$。则WCI指数计算方式如\cref{eq:wci}所示。
+    \begin{equation}
+      \label{eq:wci}
+      \begin{aligned}
+        \text{WCI} &= \left\{ 0.3\left[0.85 \ln (\frac{R}{d} + 1)+ 0.15 \ln (\frac{10Z}{d} + 1)\right] \right. \\
+                   &+ 0.3\left[0.85 \ln (\frac{R}{n} + 1)+ 0.15 \ln (\frac{10Z}{n} + 1)\right] \\
+                   &+ 0.1\left[0.85 \ln (R_{max} + 1)+ 0.15 \ln (10Z_{max} + 1)\right] \\
+                   &\left. + 0.3\left[0.85 \ln (\frac{R_t}{d} + 1)+ 0.15 \ln (\frac{10Z_t}{d} + 1)\right]  \right\} ^ 2 \times 10 \\
+      \end{aligned}
+    \end{equation}
+
+    然而，这种计算方式在处理“10w+”推送时存在问题。
+
     以及公众号
     量化单篇推送的传播效力。
+    \begin{figure}
+      \centering
+      \includegraphics[width=0.9\linewidth]{allR.png}
+      \caption{全部推送阅读量分布}
+      \label{fig:allR}
+    \end{figure}
+    \begin{figure}
+      \centering
+      \includegraphics[width=0.9\linewidth]{non10wR.png}
+      \caption{非10w+推送阅读量分布}
+      \label{fig:allR}
+    \end{figure}
     \section{研究发现及结果解释}
+    \input{figs.tex}
     \begin{table}[!htbp] \centering 
       \caption{} 
       \label{} 
