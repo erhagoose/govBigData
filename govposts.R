@@ -31,17 +31,14 @@ analyzePubposts <- function (pubtitle, pubposts) {
   # fit
   lda_model = LDA$new(n_topics = 10, doc_topic_prior = 0.1, topic_word_prior = 0.01)
   doc_topic_distr = 
-    lda_model$fit_transform(x = dtm, n_iter = 1000, 
+    lda_model$fit_transform(x = dtm, n_iter = 500, 
                             convergence_tol = 0.0001, n_check_convergence = 25, 
                             progressbar = TRUE)
-  wds <- lda_model$get_top_words(n = 10, lambda = 0.2)
+  wds <- lda_model$get_top_words(n = 30, lambda = 0.2)
   topwords <- wds[1,]
   
   # plot lda
   lda_model$plot(out.dir = sprintf('outputs/%s/', pubtitle), open.browser = FALSE)
-  
-  # calc ppi
-  pubposts$ppi <- mapply(ppi, pubposts$readNum, pubposts$likeNum)
   
   # plot dist
   doc_topic_rdnum <- as.data.frame(doc_topic_distr * pubposts$ppi)
@@ -59,11 +56,16 @@ analyzePubposts <- function (pubtitle, pubposts) {
 
   # fit
   pubposts_topics <- as.data.frame(doc_topic_distr)
-  pubposts_topics <- cbind(`_id` = row.names(pubposts_topics),
+  if(.Platform$OS.type == "windows"){
+    new_names<-unlist(lapply(row.names(pubposts_topics), FUN = function(x) {return(substr(x,2,1000000))}))
+  } else {
+    new_names<-row.names(pubposts_topics)
+  }
+  pubposts_topics <- cbind(`_id` = new_names,
                            pubposts_topics,
                            stringsAsFactors = FALSE)
   row.names(pubposts_topics) <- 1:nrow(pubposts_topics)
-  pubposts_topics = merge(pubposts_topics, pubposts[c('_id', 'ppi')], by = '_id', all.x=TRUE)
+  pubposts_topics = na.omit(merge(pubposts_topics, pubposts[c('_id', 'ppi')], by = '_id', all.x=TRUE))
   cent.data <- apply(pubposts_topics[,-1], 2, function(x){ x - mean(x) })
   lm.sol <- lm(ppi ~ 0 + V1 + V2 + V3 + V4 + V5 + V6 + V7 + V8 + V9,
                data = as.data.frame(cent.data))

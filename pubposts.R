@@ -41,7 +41,7 @@ analyzePubposts <- function (pubtitle, pubposts) {
   lda_model$plot(out.dir = sprintf('outputs/%s/', pubtitle), open.browser = FALSE)
   
   # calc ppi
-  pubposts$ppi <- mapply(ppi, pubposts$readNum, pubposts$likeNum)
+  # pubposts$ppi <- mapply(ppi, pubposts$readNum, pubposts$likeNum)
   
   # plot dist
   doc_topic_rdnum <- as.data.frame(doc_topic_distr * pubposts$ppi)
