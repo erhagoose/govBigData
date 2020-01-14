@@ -1,0 +1,50 @@
+
+Call:
+lm(formula = ppi ~ 0 + V1 + V2 + V3 + V4 + V5 + V6 + V7 + V8 + 
+    V9, data = as.data.frame(cent.data))
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-2.4013 -0.4359 -0.0363  0.4718  3.3432 
+
+Coefficients:
+   Estimate Std. Error t value Pr(>|t|)  
+V1  0.18719    0.38095   0.491   0.6233  
+V2 -0.34543    0.25614  -1.349   0.1780  
+V3  0.09666    0.25946   0.373   0.7096  
+V4  0.30766    0.33022   0.932   0.3519  
+V5  0.24388    0.27017   0.903   0.3671  
+V6  0.90208    0.36787   2.452   0.0145 *
+V7 -0.16415    0.30489  -0.538   0.5905  
+V8 -0.18136    0.26401  -0.687   0.4924  
+V9  0.23633    0.32417   0.729   0.4663  
+---
+Signif. codes:  0 ¡®***¡¯ 0.001 ¡®**¡¯ 0.01 ¡®*¡¯ 0.05 ¡®.¡¯ 0.1 ¡® ¡¯ 1
+
+Residual standard error: 0.7802 on 609 degrees of freedom
+Multiple R-squared:  0.04315,	Adjusted R-squared:  0.02901 
+F-statistic: 3.051 on 9 and 609 DF,  p-value: 0.001391
+
+
+% Table created by stargazer v.5.2.2 by Marek Hlavac, Harvard University. E-mail: hlavac at fas.harvard.edu
+% Date and time: ÖÜ¶þ, 1ÔÂ 14, 2020 - 19:39:31
+\begin{table}[!htbp] \centering 
+  \caption{} 
+  \label{} 
+\begin{tabular}{@{\extracolsep{5pt}} ccccc} 
+\\[-1.8ex]\hline 
+\hline \\[-1.8ex] 
+ & Estimate & Std. Error & t value & Pr(\textgreater \textbar t\textbar ) \\ 
+\hline \\[-1.8ex] 
+V1 & $0.187$ & $0.381$ & $0.491$ & $0.623$ \\ 
+V2 & $$-$0.345$ & $0.256$ & $$-$1.349$ & $0.178$ \\ 
+V3 & $0.097$ & $0.259$ & $0.373$ & $0.710$ \\ 
+V4 & $0.308$ & $0.330$ & $0.932$ & $0.352$ \\ 
+V5 & $0.244$ & $0.270$ & $0.903$ & $0.367$ \\ 
+V6 & $0.902$ & $0.368$ & $2.452$ & $0.014$ \\ 
+V7 & $$-$0.164$ & $0.305$ & $$-$0.538$ & $0.591$ \\ 
+V8 & $$-$0.181$ & $0.264$ & $$-$0.687$ & $0.492$ \\ 
+V9 & $0.236$ & $0.324$ & $0.729$ & $0.466$ \\ 
+\hline \\[-1.8ex] 
+\end{tabular} 
+\end{table} 
