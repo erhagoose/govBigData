@@ -1,4 +1,4 @@
-\documentclass[a4paper,12pt]{article}
+\documentclass[a4paper,12pt,UTF8]{article}
 \usepackage[notoc,noabs]{HaotianReport}
 
 \title{基于文本数据挖掘的官媒主题效力分析}
@@ -6,7 +6,7 @@
 \authorinfo{lht18@mails.tsinghua.edu.cn}
 \runninghead{清华大学《政务大数据》2019秋季学期}
 \studytime{2019年12月}
-
+\graphicspath{{./}{./img/}{./fig/}{./image/}{./figure/}{./picture/}{./pic/}}
 \begin{document}
     \maketitle
     \section{研究背景}
@@ -74,7 +74,7 @@
       \item 查看可视化内容并获取数据。数据储存在MongoDB数据库中，可导出为json文件或直接拷贝数据库。爬取的公众号信息包括：名称、头像、更新时间、标识码。爬取的推送信息包括：名称、封面、公众号、发布时间、评论（含点赞数）、内容（纯文本）、点赞数、阅读量。
     \end{enumerate}
     \subsection{样本描述}
-    通过上述的数据获取方式，共获取到官媒相关公众号19项，非官媒公众号20项。各公众号在给定时间范围内的推送总数如\cref{fig:profiles}所示。其中，WPI为该公众号的传播力度量，将在\cref{sub:xiaoli}中提及。
+    通过上述的数据获取方式，共获取到官媒相关公众号19项，非官媒公众号20项。各公众号在给定时间范围内的推送总数如\cref{fig:profiles}所示。其中，WPI为该公众号的传播力度量，将在\cref{sub:xiaoli}中提及，数值越大代表传播力越高。
     \begin{figure}
       \centering
       \includegraphics[width=0.9\linewidth]{profiles.png}
@@ -82,45 +82,58 @@
       \label{fig:profiles}
     \end{figure}
     
-    从图中可见，官媒公众号的发布数量，要远大于非官媒公众号数量。
+    从图中可见，官媒公众号的发布数量，要远大于非官媒公众号数量。事实上，根据本人的观察，官媒公众号可以每天多次发布信息，其单日发送的推送上限要远高于普通的机构媒体和内容运营公众号。另外，上海、重庆、深圳的政府发布公众号在所有观测公众号中累计发布数量位列前三，人民日报公众号在所有观测公众号中累计发布数量遥遥领先，传播力也同样很高。这一类排名靠前的公众号，因其运营更好、数据更多，更具备分析的价值。
     \subsection{效力分析}
     \label{sub:xiaoli}
-    以及公众号
-    量化单篇推送的传播效力。
+    在本文中，对推送效力、公众号效力的量化分析是至关重要的。所谓效力的量化分析，即是建立从推文或公众号数据，到效力量化指标的映射。
+    
+    清博大数据对于该问题提出了一种名为微信传播指数WCI的公众号传播效力分析方法\cite{清博大数据2020}。分别记总阅读数$R$，总在看（点赞）数$Z$，最大阅读数$R_{max}$，最大在看数$Z_{max}$，头条总阅读数$R_t$，头条总在看数$Z_t$，统计总天数$d$，统计总篇数$n$。则WCI指数计算方式如\cref{eq:wci}所示。
+    \begin{equation}
+      \label{eq:wci}
+      \begin{aligned}
+        \text{WCI} &= \left\{ 0.3\left[0.85 \ln (\frac{R}{d} + 1)+ 0.15 \ln (\frac{10Z}{d} + 1)\right] \right. \\
+                   &+ 0.3\left[0.85 \ln (\frac{R}{n} + 1)+ 0.15 \ln (\frac{10Z}{n} + 1)\right] \\
+                   &+ 0.1\left[0.85 \ln (R_{max} + 1)+ 0.15 \ln (10Z_{max} + 1)\right] \\
+                   &\left. + 0.3\left[0.85 \ln (\frac{R_t}{d} + 1)+ 0.15 \ln (\frac{10Z_t}{d} + 1)\right]  \right\} ^ 2 \times 10 \\
+      \end{aligned}
+    \end{equation}
+
+    然而，这种计算方式在处理“10w+”推送时存在问题。在本文的爬取方法中，由于微信官方的限制，超过10万的数字将被显示为“10w+”，对于这类数值我们记为100001。在\cref{fig:allR}展示了全部推送的阅读量分布，可见，由于微信官方对于数据的截断，在100000附近出现了一个异常的尖峰。绘制非10w+推送的阅读量分布如\cref{fig:nonR}所示。该分布近似为一个泊松分布。
+    
+    \begin{figure}
+      \centering
+      \includegraphics[width=0.9\linewidth]{allR.png}
+      \caption{全部推送阅读量分布}
+      \label{fig:allR}
+    \end{figure}
+    \begin{figure}
+      \centering
+      \includegraphics[width=0.9\linewidth]{non10wR.png}
+      \caption{非10w+推送阅读量分布}
+      \label{fig:nonR}
+    \end{figure}
+
+    因此，我们不应以100001估计10w+推送的阅读量，而是应赋予其更大的值。由于泊松尾部的数据方差较大，我们以150000估计其阅读量，以120000估计其在看量。另外，WCI中的平方函数主要是为了调整数据的范围，在我们的研究中并不必要。为了区别这种处理后的系数与WCI的区别，我们记该系数为WPI(Wechat Propagation Index)，如\cref{eq:wpi}所示。其中，$R'$为修正后的总阅读数，$Z'$为修正后的总在看数，$R_{max}'$为修正后的最大阅读数，$Z_{max}'$为修正后的最大在看数，$R_t'$为修正后的头条总阅读数，$Z_t'$为修正后的头条总在看数。
+
+    \begin{equation}
+      \label{eq:wpi}
+      \begin{aligned}
+        \text{WPI} &= 0.3\left[0.85 \ln (\frac{R'}{d} + 1)+ 0.15 \ln (\frac{10Z'}{d} + 1)\right] \\
+                   &+ 0.3\left[0.85 \ln (\frac{R'}{n} + 1)+ 0.15 \ln (\frac{10Z'}{n} + 1)\right] \\
+                   &+ 0.1\left[0.85 \ln (R_{max}' + 1)+ 0.15 \ln (10Z_{max}' + 1)\right] \\
+                   &+ 0.3\left[0.85 \ln (\frac{R_t'}{d} + 1)+ 0.15 \ln (\frac{10Z_t'}{d} + 1)\right] \\
+      \end{aligned}
+    \end{equation}
+    另记单片推送系数为PPI(Post Propagation Index)，计算方式如\cref{eq:ppi}所示。其中，$R$为该推送阅读量，$Z$为该推送在看量。
+    \begin{equation}
+      \label{eq:ppi}
+      \text{PPI} = 0.85 \ln (\frac{R}{d} + 1)+ 0.15 \ln (\frac{10Z}{d} + 1)
+    \end{equation}
     \section{研究发现及结果解释}
-    \begin{table}[!htbp] \centering 
-      \caption{} 
-      \label{} 
-    \begin{tabular}{@{\extracolsep{5pt}} ccccc} 
-    \\[-1.8ex]\hline 
-    \hline \\[-1.8ex] 
-     & Estimate & Std. Error & t value & Pr(\textgreater \textbar t\textbar ) \\ 
-    \hline \\[-1.8ex] 
-    V1 & $$-$0.369$ & $0.047$ & $$-$7.910$ & $0$ \\ 
-    V2 & $0.182$ & $0.042$ & $4.277$ & $0.00002$ \\ 
-    V3 & $$-$0.354$ & $0.034$ & $$-$10.448$ & $0$ \\ 
-    V4 & $$-$0.233$ & $0.038$ & $$-$6.172$ & $0$ \\ 
-    V5 & $0.012$ & $0.041$ & $0.300$ & $0.764$ \\ 
-    V6 & $$-$0.251$ & $0.030$ & $$-$8.262$ & $0$ \\ 
-    V7 & $0.318$ & $0.043$ & $7.421$ & $0$ \\ 
-    V8 & $$-$0.214$ & $0.040$ & $$-$5.283$ & $0.00000$ \\ 
-    V9 & $0.440$ & $0.061$ & $7.269$ & $0$ \\ 
-    \hline \\[-1.8ex] 
-    \end{tabular} 
-    \end{table} 
-      \begin{enumerate}
-        \item 样本描述
-        \begin{enumerate}
-          \item 观测范围（时间、空间）
-          \item 数据量
-          \item 数据分布
-          \item 公众号的分布
-        \end{enumerate}
-        \item 效力分析：如何量化单篇推送的传播效力
-        \item 主题提取
-        \item 情感分析
-        \item 相关性分析 （主题 - 效力） （情感 - 效力）
-      \end{enumerate}
+    \subsection{公众号主题效力分析}
+    % \input{figs.tex}
+    \subsection{官媒主题效力分析}
+    
     \label{applastpage}
     \newpage
     \bibliography{report}
