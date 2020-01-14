@@ -42,7 +42,7 @@ ggsave("outputs/allR.svg", width = 7, height = 5)
 
 ggplot(nposts, aes(likeNum)) +
   geom_histogram(binwidth = 100, color = 'white') +
-  scale_x_continuous(limits = c(NA, 3000)) +
+  scale_x_continuous(limits = c(NA, 5000)) +
   labs(x = '在看量', y = '推送文章数', title = '全部有效文章在看量分布') +
   theme(text = element_text(family='Kai'),
         plot.title = element_text(hjust = 0.5))
