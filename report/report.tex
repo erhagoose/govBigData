@@ -1,4 +1,4 @@
-\documentclass[a4paper,12pt]{article}
+\documentclass[a4paper,12pt,UTF8]{article}
 \usepackage[notoc,noabs]{HaotianReport}
 
 \title{基于文本数据挖掘的官媒主题效力分析}
@@ -6,7 +6,7 @@
 \authorinfo{lht18@mails.tsinghua.edu.cn}
 \runninghead{清华大学《政务大数据》2019秋季学期}
 \studytime{2019年12月}
-
+\graphicspath{{./}{./img/}{./fig/}{./image/}{./figure/}{./picture/}{./pic/}}
 \begin{document}
     \maketitle
     \section{研究背景}
@@ -98,8 +98,21 @@
       \end{aligned}
     \end{equation}
 
-    然而，这种计算方式在处理“10w+”推送时存在问题。在本文的爬取方法中，由于微信官方的限制，超过10万的数字将被显示为“10w+”，对于这类数值我们记为100001。在\cref{fig:allR}展示了全部推送的阅读量分布，可见，由于微信官方对于数据的截断，在100000附近出现了一个异常的尖峰。绘制非10w+推送的阅读量分布如\cref{fig:nonR}所示。改分布近似为一个泊松分布。
+    然而，这种计算方式在处理“10w+”推送时存在问题。在本文的爬取方法中，由于微信官方的限制，超过10万的数字将被显示为“10w+”，对于这类数值我们记为100001。在\cref{fig:allR}展示了全部推送的阅读量分布，可见，由于微信官方对于数据的截断，在100000附近出现了一个异常的尖峰。绘制非10w+推送的阅读量分布如\cref{fig:nonR}所示。该分布近似为一个泊松分布。
     
+    \begin{figure}
+      \centering
+      \includegraphics[width=0.9\linewidth]{allR.png}
+      \caption{全部推送阅读量分布}
+      \label{fig:allR}
+    \end{figure}
+    \begin{figure}
+      \centering
+      \includegraphics[width=0.9\linewidth]{non10wR.png}
+      \caption{非10w+推送阅读量分布}
+      \label{fig:nonR}
+    \end{figure}
+
     因此，我们不应以100001估计10w+推送的阅读量，而是应赋予其更大的值。由于泊松尾部的数据方差较大，我们以150000估计其阅读量，以120000估计其在看量。另外，WCI中的平方函数主要是为了调整数据的范围，在我们的研究中并不必要。为了区别这种处理后的系数与WCI的区别，我们记该系数为WPI(Wechat Propagation Index)，如\cref{eq:wpi}所示。其中，$R'$为修正后的总阅读数，$Z'$为修正后的总在看数，$R_{max}'$为修正后的最大阅读数，$Z_{max}'$为修正后的最大在看数，$R_t'$为修正后的头条总阅读数，$Z_t'$为修正后的头条总在看数。
 
     \begin{equation}
@@ -116,53 +129,11 @@
       \label{eq:ppi}
       \text{PPI} = 0.85 \ln (\frac{R}{d} + 1)+ 0.15 \ln (\frac{10Z}{d} + 1)
     \end{equation}
-    \begin{figure}
-      \centering
-      \includegraphics[width=0.9\linewidth]{allR.png}
-      \caption{全部推送阅读量分布}
-      \label{fig:allR}
-    \end{figure}
-    \begin{figure}
-      \centering
-      \includegraphics[width=0.9\linewidth]{non10wR.png}
-      \caption{非10w+推送阅读量分布}
-      \label{fig:nonR}
-    \end{figure}
     \section{研究发现及结果解释}
-    \input{figs.tex}
-    \begin{table}[!htbp] \centering 
-      \caption{} 
-      \label{} 
-    \begin{tabular}{@{\extracolsep{5pt}} ccccc} 
-    \\[-1.8ex]\hline 
-    \hline \\[-1.8ex] 
-     & Estimate & Std. Error & t value & Pr(\textgreater \textbar t\textbar ) \\ 
-    \hline \\[-1.8ex] 
-    V1 & $$-$0.369$ & $0.047$ & $$-$7.910$ & $0$ \\ 
-    V2 & $0.182$ & $0.042$ & $4.277$ & $0.00002$ \\ 
-    V3 & $$-$0.354$ & $0.034$ & $$-$10.448$ & $0$ \\ 
-    V4 & $$-$0.233$ & $0.038$ & $$-$6.172$ & $0$ \\ 
-    V5 & $0.012$ & $0.041$ & $0.300$ & $0.764$ \\ 
-    V6 & $$-$0.251$ & $0.030$ & $$-$8.262$ & $0$ \\ 
-    V7 & $0.318$ & $0.043$ & $7.421$ & $0$ \\ 
-    V8 & $$-$0.214$ & $0.040$ & $$-$5.283$ & $0.00000$ \\ 
-    V9 & $0.440$ & $0.061$ & $7.269$ & $0$ \\ 
-    \hline \\[-1.8ex] 
-    \end{tabular} 
-    \end{table} 
-      \begin{enumerate}
-        \item 样本描述
-        \begin{enumerate}
-          \item 观测范围（时间、空间）
-          \item 数据量
-          \item 数据分布
-          \item 公众号的分布
-        \end{enumerate}
-        \item 效力分析：如何量化单篇推送的传播效力
-        \item 主题提取
-        \item 情感分析
-        \item 相关性分析 （主题 - 效力） （情感 - 效力）
-      \end{enumerate}
+    \subsection{公众号主题效力分析}
+    % \input{figs.tex}
+    \subsection{官媒主题效力分析}
+    
     \label{applastpage}
     \newpage
     \bibliography{report}
