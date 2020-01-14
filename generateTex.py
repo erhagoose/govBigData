@@ -1,10 +1,11 @@
 import csv
 with open('outputs/profiles.csv', newline='') as csvfile:
     prof = csv.reader(csvfile)
-    with open('report/figs.tex', 'w') as texfile:
+    with open('report/figs.tex', 'w', encoding='utf8') as texfile, open('outputs/logs.txt', 'w', encoding='utf8') as txtfile:
         for row in prof:
           if not '发布' in row[3]:
             continue
+          print(f'{row[3]}', file=txtfile)
           print(f'''
 \\begin{{figure}}
   \centering

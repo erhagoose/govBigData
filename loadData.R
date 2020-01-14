@@ -1,3 +1,4 @@
+source('utils.R')
 
 # mongodb
 mongourl <- "mongodb://192.10.10.108:27017/wechat_spider"
@@ -38,3 +39,6 @@ pbps <- merge(posts,
               by = 'msgBiz',
               all.x = TRUE,
               all.y = FALSE)
+
+# calc ppi
+pbps$ppi <- mapply(ppi, pbps$readNum, pbps$likeNum)
