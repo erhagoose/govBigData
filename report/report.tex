@@ -64,7 +64,14 @@
       \item 当解释变量线性无关且具有相同量纲时，多元回归得到的变量系数大小可以用来比较解释变量对响应变量的影响大小；而变量系数的符号则可用来衡量该解释变量对响应变量（文章效力）的作用方向。
     \end{itemize}
 
-    多元线性回归的模型假设中，要求模型(\ref{lm})中$\epsilon$ 服从正态分布，故而响应变量$Y$即本文所研究的微信文章的效力数据也应服从正态分布。所以在建模前，为验证模型的可行性，我们对数据进行了分布检验，如图中的qq图所示，数据点在qq图上的排布近似线性，即数据满足正态性假设，故而本文建立的多元回归模型是合理的。
+    多元线性回归的模型假设中，要求模型(\ref{lm})中$\epsilon$ 服从正态分布，故而响应变量$Y$即本文所研究的微信文章的效力数据也应服从正态分布。所以在建模前，为验证模型的可行性，我们对数据进行了分布检验。例如，“北京发布”公众号中各推送效力的Q-Q图如\cref{fig:beijing-qq}，数据点在qq图上的排布近似线性，即数据满足正态性假设。
+
+    \begin{figure}
+      \centering
+      \includegraphics[width=0.9\linewidth]{北京发布-qq.png}
+      \caption{“北京发布”推送效力Q-Q图}
+      \label{fig:beijing-qq}
+    \end{figure}
 
     \section{数据来源及变量测量}
     \subsection{数据来源}
@@ -134,7 +141,7 @@
     \end{equation}
     \section{研究发现及结果解释}
     \subsection{公众号主题效力分析}
-    这部分我们聚焦各政府发布公众号。首先应对各公众号进行主题分解，分解结果部署在网络上，可以通过访问\url{https://nogeek-static.netlify.com/gov/公众号名称/#lambda=0.2}查看，该网页的生成采用了LDAvis包\cite{sievert2014ldavis}。例如，访问\url{https://nogeek-static.netlify.com/gov/上海发布/#lambda=0.2}，可见如\cref{fig:shanghai-vis}所示界面。图中，左侧的圆圈代表了10个主题在两个主成分下的分布情况，圆圈距离越近代表主题越接近。点击各个圆圈，可以查看该主题下的成分词。每个主题均由若干主题成分词描述，其排序综合考虑了该主题词在当前主题下的频率绝对值及相对全部文档中的频率的相对值，选择系数$\lambda=0.2$代表更多地考虑主题词的相对值，即该主题的特色词。例如，\cref{fig:shanghai-vis}中的主题1包括以下词组：发展，创新，李强，推动，产业，习近平，全球……。可见，该主题主要是政治政策。
+    这部分我们聚焦各政府发布公众号。首先应对各公众号进行主题分解\cite{text2vec}，分解结果部署在网络上，可以通过访问\url{https://nogeek-static.netlify.com/gov/公众号名称/#lambda=0.2}查看，该网页的生成采用了LDAvis包\cite{sievert2014ldavis}。例如，访问\url{https://nogeek-static.netlify.com/gov/上海发布/#lambda=0.2}，可见如\cref{fig:shanghai-vis}所示界面。图中，左侧的圆圈代表了10个主题在两个主成分下的分布情况，圆圈距离越近代表主题越接近。点击各个圆圈，可以查看该主题下的成分词。每个主题均由若干主题成分词描述，其排序综合考虑了该主题词在当前主题下的频率绝对值及相对全部文档中的频率的相对值，选择系数$\lambda=0.2$代表更多地考虑主题词的相对值，即该主题的特色词。例如，\cref{fig:shanghai-vis}中的主题1包括以下词组：发展，创新，李强，推动，产业，习近平，全球……。可见，该主题主要是政治政策。
   
     \begin{figure}
       \centering
@@ -206,29 +213,118 @@ F-statistic: 63.74 on 9 and 9936 DF,  p-value: < 2.2e-16
       \end{table}
 
     \subsection{官媒主题效力分析}
-
+    类似于对单个公众号的分析结果，\cref{fig:zffb-box}中给出了对“政府发布”类全体公众号提取的主题-效力情况，\cref{fig:gfmt-box}给出了“官方媒体”类全体公众号提取的主题-效力情况，\cref{fig:zffbgfmt-box}则给出了本文关注的全部官媒（政府发布+官方媒体）的主题-效力情况。
     \begin{figure}
       \centering
       \includegraphics[width=0.9\linewidth]{政府发布.png}
       \caption{政府发布各主题下推送传播效力分布}
       \label{fig:zffb-box}
     \end{figure}
+    \cref{fig:zffb-box}中的主题词可以在\url{https://nogeek-static.netlify.com/gov/政府发布/#lambda=0.2}查询到。其中，“作品”代表的主题（）和“男”代表的主题（）更受关注，而“报名”代表的主题（）则鲜有问津。
+    \begin{table}[!htbp] \centering 
+      \caption{政府发布公众号主题-效力回归分析} 
+      \label{tbl:zffb-reg} 
+    \begin{tabular}{@{\extracolsep{5pt}} ccccc} 
+    \\[-1.8ex]\hline 
+    \hline \\[-1.8ex] 
+     & Estimate & Std. Error & t value & Pr(\textgreater \textbar t\textbar ) \\ 
+    \hline \\[-1.8ex] 
+    V1 & $$-$0.848$ & $0.068$ & $$-$12.487$ & $0$*** \\ 
+    V2 & $1.625$ & $0.057$ & $28.288$ & $0$*** \\ 
+    V3 & $0.719$ & $0.056$ & $12.755$ & $0$*** \\ 
+    V4 & $1.591$ & $0.056$ & $28.587$ & $0$*** \\ 
+    V5 & $$-$0.249$ & $0.061$ & $$-$4.053$ & $0.0001$*** \\ 
+    V6 & $0.111$ & $0.056$ & $1.967$ & $0.049$** \\ 
+    V7 & $1.753$ & $0.048$ & $36.867$ & $0$*** \\ 
+    V8 & $0.672$ & $0.059$ & $11.430$ & $0$*** \\ 
+    V9 & $$-$0.373$ & $0.057$ & $$-$6.603$ & $0$*** \\ 
+    \hline \\[-1.8ex] 
+    \end{tabular} 
+    \end{table} 
+    % TODO: 回归分析
+    \begin{lstlisting}
+Residual standard error: 1.722 on 46235 degrees of freedom
+Multiple R-squared:  0.1035,	Adjusted R-squared:  0.1033 
+F-statistic:   593 on 9 and 46235 DF,  p-value: < 2.2e-16
+    \end{lstlisting}
+
     \begin{figure}
       \centering
       \includegraphics[width=0.9\linewidth]{官方媒体.png}
       \caption{官方媒体各主题下推送传播效力分布}
       \label{fig:gfmt-box}
     \end{figure}
+    \cref{fig:gfmt-box}中的主题词可以在\url{https://nogeek-static.netlify.com/gov/官方媒体/#lambda=0.2}查询到。其中，“老师”代表的主题（）、“民警”代表的主题（）、“香港”代表的主题（）更受关注，而“招聘”代表的主题（）则鲜有问津。
+    \begin{table}[!htbp] \centering 
+      \caption{官方媒体公众号主题-效力回归分析} 
+      \label{tbl:gfmt-reg} 
+    \begin{tabular}{@{\extracolsep{5pt}} ccccc} 
+    \\[-1.8ex]\hline 
+    \hline \\[-1.8ex] 
+     & Estimate & Std. Error & t value & Pr(\textgreater \textbar t\textbar ) \\ 
+    \hline \\[-1.8ex] 
+    V1 & $0.933$ & $0.115$ & $8.083$ & $0$*** \\ 
+    V2 & $3.459$ & $0.089$ & $38.819$ & $0$*** \\ 
+    V3 & $2.769$ & $0.094$ & $29.534$ & $0$*** \\ 
+    V4 & $1.294$ & $0.099$ & $13.050$ & $0$*** \\ 
+    V5 & $$-$1.037$ & $0.102$ & $$-$10.196$ & $0$*** \\ 
+    V6 & $3.337$ & $0.094$ & $35.323$ & $0$*** \\ 
+    V7 & $4.030$ & $0.094$ & $42.979$ & $0$*** \\ 
+    V8 & $2.815$ & $0.095$ & $29.507$ & $0$*** \\ 
+    V9 & $2.426$ & $0.101$ & $23.978$ & $0$*** \\ 
+    \hline \\[-1.8ex] 
+    \end{tabular} 
+    \end{table}
+    % TODO: 回归分析
+    \begin{lstlisting}
+Residual standard error: 1.699 on 29539 degrees of freedom
+Multiple R-squared:  0.2625,	Adjusted R-squared:  0.2623 
+F-statistic:  1168 on 9 and 29539 DF,  p-value: < 2.2e-16
+    \end{lstlisting}
+    
     \begin{figure}
       \centering
       \includegraphics[width=0.9\linewidth]{政府发布+官方媒体.png}
       \caption{政府发布与官方媒体各主题下推送传播效力分布}
       \label{fig:zffbgfmt-box}
     \end{figure}
+    \cref{fig:zffbgfmt-box}中的主题词可以在\url{https://nogeek-static.netlify.com/gov/政府发布+官方媒体/#lambda=0.2}查询到。其中，“孩子”代表的主题（）、“国际”代表的主题（）、“垃圾”代表的主题（）更受关注，而“案件”代表的主题（）、“吃”代表的主题（）则鲜有问津。
+    \begin{table}[!htbp] \centering 
+      \caption{政府发布、官方媒体公众号主题-效力回归分析} 
+      \label{tbl:zffbgfmt-reg} 
+    \begin{tabular}{@{\extracolsep{5pt}} ccccc} 
+    \\[-1.8ex]\hline 
+    \hline \\[-1.8ex] 
+     & Estimate & Std. Error & t value & Pr(\textgreater \textbar t\textbar ) \\ 
+    \hline \\[-1.8ex] 
+    V1 & $1.843$ & $0.052$ & $35.231$ & $0$*** \\ 
+    V2 & $$-$0.501$ & $0.048$ & $$-$10.508$ & $0$*** \\ 
+    V3 & $$-$1.012$ & $0.054$ & $$-$18.852$ & $0$*** \\ 
+    V4 & $0.256$ & $0.056$ & $4.609$ & $0.00000$*** \\ 
+    V5 & $0.412$ & $0.051$ & $8.150$ & $0$*** \\ 
+    V6 & $2.623$ & $0.051$ & $50.964$ & $0$*** \\ 
+    V7 & $$-$0.060$ & $0.051$ & $$-$1.186$ & $0.236$ \\ 
+    V8 & $0.452$ & $0.053$ & $8.554$ & $0$*** \\ 
+    V9 & $3.199$ & $0.047$ & $68.636$ & $0$*** \\ 
+    \hline \\[-1.8ex] 
+    \end{tabular} 
+    \end{table}
+    % TODO: 回归分析
+    \begin{lstlisting}
+Residual standard error: 1.881 on 75783 degrees of freedom
+Multiple R-squared:  0.2337,	Adjusted R-squared:  0.2336 
+F-statistic:  2568 on 9 and 75783 DF,  p-value: < 2.2e-16
+    \end{lstlisting}
+
     \appendix
     \section{公众号主题-折算效力箱图}
     见\cref{fig:长沙发布-box}到\cref{fig:深圳发布-box}。
     \input{figs.tex}
+    \section{相关结果链接}
+    公众号主题分解结果见链接\url{https://nogeek-static.netlify.com/gov/[NAME]/#lambda=0.2}。其中[NAME]替换为公众号名称。
+
+    公众号主题-效力回归结果见链接\url{https://nogeek-static.netlify.com/gov/coef/[NAME].txt}。其中[NAME]替换为公众号名称。结果采用\cite{stargazer}生成。
+
     \label{applastpage}
     \newpage
     \bibliography{report}
