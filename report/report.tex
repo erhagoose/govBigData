@@ -80,7 +80,7 @@
     通过上述的数据获取方式，共获取到官媒相关公众号19项，非官媒公众号20项。各公众号在给定时间范围内的推送总数如\cref{fig:profiles}所示。其中，WPI为该公众号的传播力度量，将在\cref{sub:xiaoli}中提及，数值越大代表传播力越高。
     \begin{figure}
       \centering
-      \includegraphics[width=0.9\linewidth]{profiles.png}
+      \includegraphics[width=1\linewidth]{profiles.png}
       \caption{公众号数据获取情况}
       \label{fig:profiles}
     \end{figure}
@@ -152,10 +152,61 @@
     \end{equation}
     $R_i(p)$越大，代表该主题的折算推送传播效力越高，即该主题下的推送更容易被传播。
     
-    由于绘图的限制，此处每个主题均以排序第一的代表词表示，具体主题词组则需查询\url{https://nogeek-static.netlify.com/gov/公众号名称/#lambda=0.2}。对\cref{fig:上海发布-box}来说，“报名”代表的主题（报名，考生，招生，考试，招聘，岗位，报考，面试，录取，资格，专业）传播力显然最低，而“号线”代表的主题（号线，地铁，景区，免费，虹桥，票价，客流，铁路，门票，列车，高速）、“垃圾”代表的主题（垃圾，分类，部门，监管，住房，审批，保障，服务，规范，整治，处置，养老）传播力则显然更高。这也意味着，在“上海发布”公众号，交通话题和民生话题更受受众关注，而公众或许不太会在这个公众号上关注招考相关的信息。
+    由于绘图的限制，此处每个主题均以排序第一的代表词表示，具体主题词组则需查询\url{https://nogeek-static.netlify.com/gov/公众号名称/#lambda=0.2}。对\cref{fig:上海发布-box}来说，“报名”代表的主题（报名，考生，招生，考试，招聘，岗位，报考，面试，录取，资格，专业）传播力显然最低，而“度”代表的主题（度，天气，活动，多云，台风，高温，阵雨，气温，展览，演出，体验，明天，即“天气”主题）、“政务”代表的主题（政务，医疗，职工，审批，门诊，医院，护理，补贴，行政，事务，医疗机构，服务，即“政务”主题）传播力则显然更高。这也意味着，在“上海发布”公众号，天气话题和政务话题更受受众关注，而公众或许不太会在这个公众号上关注招考相关的信息。
 
-    % \input{figs.tex}
+    对前九个主题进行回归分析，可获得\cref{tbl:shanghai-reg}所示的回归结果。F检验结果如下所示，可见其p-value很小，表明回归结果显著，主题与效力有关。而表格中可见，主题1、4、5、6、7、9回归结果显著。查看\url{https://nogeek-static.netlify.com/gov/上海发布/#lambda=0.2}可知，对应主题为\cref{tbl:shanghai-theme}。从表中可见，旅游风景主题对传播效力的贡献是负的，这意味着在“上海发布”公众号谈论旅游不是一个聪明的决定，而政务、天气、教育则是更受人们关注的话题。
+    \begin{lstlisting}
+Residual standard error: 0.7921 on 9936 degrees of freedom
+Multiple R-squared:  0.05459,	Adjusted R-squared:  0.05373 
+F-statistic: 63.74 on 9 and 9936 DF,  p-value: < 2.2e-16
+    \end{lstlisting}
+    
+    \begin{table}[!htbp] \centering 
+      \caption{“上海发布”公众号主题-效力回归分析} 
+      \label{tbl:shanghai-reg} 
+    \begin{tabular}{@{\extracolsep{5pt}} ccccc} 
+    \\[-1.8ex]\hline 
+    \hline \\[-1.8ex] 
+     & Estimate & Std. Error & t value & Pr(\textgreater \textbar t\textbar ) \\ 
+    \hline \\[-1.8ex] 
+    V1 & $0.313$ & $0.064$ & $4.878$ & $0.00000$*** \\ 
+    V2 & $$-$0.072$ & $0.053$ & $$-$1.341$ & $0.180$ \\ 
+    V3 & $0.133$ & $0.095$ & $1.395$ & $0.163$ \\ 
+    V4 & $$-$0.177$ & $0.055$ & $$-$3.228$ & $0.001$** \\ 
+    V5 & $0.241$ & $0.063$ & $3.855$ & $0.0001$*** \\ 
+    V6 & $0.642$ & $0.052$ & $12.345$ & $0$*** \\ 
+    V7 & $0.280$ & $0.057$ & $4.947$ & $0.00000$*** \\ 
+    V8 & $0.053$ & $0.062$ & $0.853$ & $0.394$ \\ 
+    V9 & $0.446$ & $0.073$ & $6.098$ & $0$*** \\ 
+    \hline \\[-1.8ex] 
+    \end{tabular} 
+    \end{table} 
+
+    \begin{table}[] \centering 
+      \caption{“上海发布”公众号回归显著主题} 
+      \label{tbl:shanghai-theme} 
+      \begin{tabular}{@{}lllllll@{}}
+      \toprule
+      主题词序号 & 主题1   & 主题4    & 主题5   & 主题6   & 主题7   & 主题9   \\ \midrule
+      回归系数  & 0.313 & -0.177 & 0.241 & 0.642 & 0.280 & 0.446 \\
+      1     & 发展    & 建筑     & 垃圾    & 政务    & 度     & 中学    \\
+      2     & 创新    & 景观     & 投诉    & 医疗    & 天气    & 男     \\
+      3     & 推进    & 年代     & 消费者   & 职工    & 活动    & 学院    \\
+      4     & 推动    & 历史     & 执法    & 审批    & 多云    & 附属    \\
+      5     & 李强    & 违法行为   & 件     & 门诊    & 台风    & 女     \\
+      6     & 建设    & 黄浦江    & 样品    & 医院    & 高温    & 治疗    \\
+      7     & 习近平   & 位于     & 分类    & 护理    & 阵雨    & 汉族    \\
+      8     & 产业    & 遗址     & 出租汽车  & 补贴    & 气温    & 大学    \\
+      9     & 加快    & 苏州河    & 药品    & 行政    & 展览    & 教授    \\
+      10    & 指出    & 面积     & 销售    & 事务    & 演出    & 复旦大学  \\
+      11    & 应勇    & 平方米    & 租赁    & 医疗机构  & 体验    & 孩子    \\
+      12    & 总书记   & 驾驶     & 驾驶员   & 服务    & 明天    & 外国语   \\
+      归纳    & \textbf{思想政治}  & \textbf{旅游风景}   & \textbf{民生}    & \textbf{政府服务}  & \textbf{天气}    & \textbf{教育}    \\ \bottomrule
+      \end{tabular}
+      \end{table}
+
     \subsection{官媒主题效力分析}
+
     \begin{figure}
       \centering
       \includegraphics[width=0.9\linewidth]{政府发布.png}
@@ -170,10 +221,14 @@
     \end{figure}
     \begin{figure}
       \centering
-      \includegraphics[width=0.9\linewidth]{政府发布与官方媒体.png}
+      \includegraphics[width=0.9\linewidth]{政府发布+官方媒体.png}
       \caption{政府发布与官方媒体各主题下推送传播效力分布}
       \label{fig:zffbgfmt-box}
     \end{figure}
+    \appendix
+    \section{公众号主题-折算效力箱图}
+    见\cref{fig:长沙发布-box}到\cref{fig:深圳发布-box}。
+    \input{figs.tex}
     \label{applastpage}
     \newpage
     \bibliography{report}
